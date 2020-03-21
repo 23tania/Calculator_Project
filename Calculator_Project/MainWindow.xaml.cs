@@ -24,126 +24,172 @@ namespace Calculator_Project
         String operation = "";
         bool operationPerformed = false;
         bool isResult = false;
-
         bool isZeroCommaNecessery = false;
-
 
         public MainWindow()
         {
             InitializeComponent();
-            
         }
 
         private void ButtonNumber_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-
             
             if (isResult && isZeroCommaNecessery==false)
             {
-                wyswietlanieWyniku.Clear();
+                textBoxResult.Clear();
                 isResult = false;
             }
 
-            if (wyswietlanieWyniku.Text == "No division by 0!")
+            if (textBoxResult.Text == "No division by 0!")
             {
-                wyswietlanieWyniku.Text = "0";
+                textBoxResult.Text = "0";
             }
 
-            if ((wyswietlanieWyniku.Text == "0")||(operationPerformed))
+            if ((textBoxResult.Text == "0")||(operationPerformed))
             {
-                wyswietlanieWyniku.Clear();
+                textBoxResult.Clear();
             }
 
             operationPerformed = false;
-            wyswietlanieWyniku.Text = wyswietlanieWyniku.Text + (string)button.Content;
+            textBoxResult.Text = textBoxResult.Text + (string)button.Content;
         }
 
-        private void ButtonPLUSMINUS_Click(object sender, RoutedEventArgs e)
+        private void ButtonOPERATION_Click(object sender, RoutedEventArgs e)
         {
+            var button = (Button)sender;
 
-            if (wyswietlanieWyniku.Text == "No division by 0!")
+            if (textBoxResult.Text == "No division by 0!")
             {
-                wyswietlanieWyniku.Text = "0";
+                textBoxResult.Text = "0";
             }
 
-            double val = Double.Parse(wyswietlanieWyniku.Text);
-            val *= -1;
-            wyswietlanieWyniku.Text = val.ToString();
-        }
-
-        //przy przecinku dopisuja sie liczby
-
-        private void ButtonCOMMA_Click(object sender, RoutedEventArgs e)
-        {
-            
-            var button = (Button)sender;
-            if (operationPerformed == false)
+            if (divideByZero() /*&& operationPerformed==false*/) // 9/0 + działa
             {
-                if (!wyswietlanieWyniku.Text.Contains(","))
-                {
-                   wyswietlanieWyniku.Text = wyswietlanieWyniku.Text + ",";
-                }
-                isZeroCommaNecessery = false;
-               
+                textBoxResult.Text = "No division by 0!";
+                operationPerformed = true;
+                operation = "";
+            }
+            else if (value != 0)
+            {
+                PerformClickEquals();
+                operationPerformed = true;
+                operation = (string)button.Content;
+                equation.Text = value + " " + operation; //+=
             }
             else
             {
-                wyswietlanieWyniku.Text = "0,";
-                operationPerformed = false;
-                isZeroCommaNecessery = true;
+                operation = (string)button.Content;
+                value = Double.Parse(textBoxResult.Text);
+                equation.Text = value + " " + operation;
+                operationPerformed = true;
             }
-            
         }
 
         private void ButtonEQUALS_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
             isResult = true;
 
             if (divideByZero())
             {
-                wyswietlanieWyniku.Text = "No division by 0!";
-                
+                textBoxResult.Text = "No division by 0!";
+
             }
-            else if (wyswietlanieWyniku.Text == "No division by 0!")
+            else if (textBoxResult.Text == "No division by 0!")
             {
-                wyswietlanieWyniku.Text = "0";
+                textBoxResult.Text = "0";
             }
             else
             {
-                double nowaWartosc = Double.Parse(wyswietlanieWyniku.Text);
+                double newValue = Double.Parse(textBoxResult.Text);
                 equation.Clear();
+
                 if (operation == "+" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value + nowaWartosc).ToString();
+                    textBoxResult.Text = (value + newValue).ToString();
                 }
                 else if (operation == "-" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value - nowaWartosc).ToString();
+                    textBoxResult.Text = (value - newValue).ToString();
                 }
                 else if (operation == "x" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value * nowaWartosc).ToString();
+                    textBoxResult.Text = (value * newValue).ToString();
                 }
                 else if (operation == "/" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value / nowaWartosc).ToString();
+                    textBoxResult.Text = (value / newValue).ToString();
                 }
 
-                value = Double.Parse(wyswietlanieWyniku.Text);
+                value = Double.Parse(textBoxResult.Text);
                 operation = "";
             }
 
             //operationPerformed = false;
         }
 
+        private void ButtonPLUSMINUS_Click(object sender, RoutedEventArgs e)
+        {
+            if (textBoxResult.Text == "No division by 0!")
+            {
+                textBoxResult.Text = "0";
+            }
+
+            double val = Double.Parse(textBoxResult.Text);
+            val *= -1;
+            textBoxResult.Text = val.ToString();
+        }
+
+        private void ButtonCOMMA_Click(object sender, RoutedEventArgs e)
+        {
+            if (operationPerformed == false)
+            {
+                if (!textBoxResult.Text.Contains(","))
+                {
+                   textBoxResult.Text = textBoxResult.Text + ",";
+                }
+                isZeroCommaNecessery = false;
+            }
+            else
+            {
+                textBoxResult.Text = "0,";
+                operationPerformed = false;
+                isZeroCommaNecessery = true;
+            }
+            
+        }
+
+        private void ButtonPOWER_Click(object sender, RoutedEventArgs e)
+        {
+            if (textBoxResult.Text == "No division by 0!")
+            {
+                textBoxResult.Text = "0";
+            }
+
+            double val = Double.Parse(textBoxResult.Text);
+            val *= val;
+            textBoxResult.Text = val.ToString();
+        }
+
+        private void ButtonC_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxResult.Text = "0";
+            operation = "";
+            equation.Clear();
+        }
+
+        private void ButtonCE_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxResult.Text = "0";
+        }
+
         private bool divideByZero()
         {
-            if (operation == "/" && wyswietlanieWyniku.Text == "0")
+            if (operation == "/" && textBoxResult.Text == "0")
             {
                 operation = "";
                 equation.Clear();
+                //operationPerformed = true;
                 return true;
             }
             else
@@ -152,98 +198,42 @@ namespace Calculator_Project
             }
         }
 
-        private void ButtonOPERATION_Click(object sender, RoutedEventArgs e)
-        {
-            var button = (Button)sender;
-
-            if (wyswietlanieWyniku.Text == "No division by 0!")
-            {
-                wyswietlanieWyniku.Text = "0";
-            }
-
-            if (divideByZero())
-            {
-                wyswietlanieWyniku.Text = "No division by 0!";
-                operation = "";
-            }
-            else if (value != 0)
-            {
-                PerformClick();
-                operationPerformed = true;
-                operation = (string)button.Content;
-                equation.Text = value + " " + operation; //+=
-                
-            }
-            else
-            {
-                operation = (string)button.Content;
-                value = Double.Parse(wyswietlanieWyniku.Text);
-                equation.Text = value + " " + operation;
-                operationPerformed = true;
-            }
-        }
-
-        private void PerformClick()
+        private void PerformClickEquals()
         {
             if (divideByZero())
             {
-                wyswietlanieWyniku.Text = "No division by 0!";
+                textBoxResult.Text = "No division by 0!";
             }
-            else if (wyswietlanieWyniku.Text == "No division by 0!")
+            else if (textBoxResult.Text == "No division by 0!")
             {
-                wyswietlanieWyniku.Text = "0";
+                textBoxResult.Text = "0";
             }
             else
             {
-                double nowaWartosc = Double.Parse(wyswietlanieWyniku.Text);
+                double newValue = Double.Parse(textBoxResult.Text);
                 //equation.Clear();
                 if (operation == "+" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value + nowaWartosc).ToString();
+                    textBoxResult.Text = (value + newValue).ToString();
                 }
                 else if (operation == "-" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value - nowaWartosc).ToString();
+                    textBoxResult.Text = (value - newValue).ToString();
                 }
                 else if (operation == "x" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value * nowaWartosc).ToString();
+                    textBoxResult.Text = (value * newValue).ToString();
                 }
                 else if (operation == "/" && operationPerformed == false)
                 {
-                    wyswietlanieWyniku.Text = (value / nowaWartosc).ToString();
+                    textBoxResult.Text = (value / newValue).ToString();
                 }
 
-                value = Double.Parse(wyswietlanieWyniku.Text);
+                value = Double.Parse(textBoxResult.Text);
                 operation = "";
             }
             operationPerformed = false;
-        
-    }
 
-        private void ButtonC_Click(object sender, RoutedEventArgs e)
-        {
-            wyswietlanieWyniku.Text = "0";
-            operation = "";
-            equation.Text = "";
-        }
-
-        private void ButtonCE_Click(object sender, RoutedEventArgs e)
-        {
-            wyswietlanieWyniku.Text = "0";
-        }
-
-
-        private void ButtonPOWER_Click(object sender, RoutedEventArgs e)
-        {
-            if (wyswietlanieWyniku.Text == "No division by 0!")
-            {
-                wyswietlanieWyniku.Text = "0";
-            }
-
-            value = Double.Parse(wyswietlanieWyniku.Text);
-            value *= value;
-            wyswietlanieWyniku.Text = value.ToString();
         }
     }
 }

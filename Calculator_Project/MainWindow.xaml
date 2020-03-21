@@ -21,7 +21,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="wyswietlanieWyniku" Grid.Row="0" Grid.ColumnSpan="4" Margin="10" Text="0" FontSize="30"
+        <TextBox x:Name="textBoxResult" Grid.Row="0" Grid.ColumnSpan="4" Margin="10" Text="0" FontSize="30"
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderThickness="0"/>
         <Button x:Name="buttonONE" Grid.Row="4" Grid.Column="0" Click="ButtonNumber_Click" Margin="10" Content="1" FontSize="20"/>
         <Button x:Name="buttonTWO" Grid.Row="4" Grid.Column="1" Click="ButtonNumber_Click" Margin="10" Content="2" FontSize="20"/>
