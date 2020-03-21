@@ -34,6 +34,7 @@ namespace Calculator_Project
         private void ButtonNumber_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
+            lengthCheck();
             
             if (isResult && isZeroCommaNecessery==false)
             {
@@ -233,6 +234,15 @@ namespace Calculator_Project
                 operation = "";
             }
             operationPerformed = false;
+
+        }
+
+        private void lengthCheck()
+        {
+            if (textBoxResult.Text.Length > 18)
+            {
+                textBoxResult.FontSize = 20;
+            }
 
         }
     }
