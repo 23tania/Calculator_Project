@@ -25,6 +25,7 @@ namespace Calculator_Project
         bool operationPerformed = false;
         bool isResult = false;
         bool isZeroCommaNecessery = false;
+        bool isPowerOperationPerformed = false;
 
         public MainWindow()
         {
@@ -42,6 +43,9 @@ namespace Calculator_Project
                 isResult = false;
             }
 
+            if (isPowerOperationPerformed)
+                textBoxResult.Clear();
+
             if (textBoxResult.Text == "No division by 0!")
             {
                 textBoxResult.Text = "0";
@@ -53,6 +57,7 @@ namespace Calculator_Project
             }
 
             operationPerformed = false;
+            isPowerOperationPerformed = false;
             textBoxResult.Text = textBoxResult.Text + (string)button.Content;
         }
 
@@ -60,12 +65,18 @@ namespace Calculator_Project
         {
             var button = (Button)sender;
 
+            int lengthText = textBoxResult.Text.Length;
+            if (textBoxResult.Text[lengthText - 1] == ',')
+            {
+                textBoxResult.Text = textBoxResult.Text.Remove(lengthText - 1);
+            }
+
             if (textBoxResult.Text == "No division by 0!")
             {
                 textBoxResult.Text = "0";
             }
 
-            if (divideByZero() /*&& operationPerformed==false*/) // 9/0 + działa
+            if (divideByZero())
             {
                 textBoxResult.Text = "No division by 0!";
                 operationPerformed = true;
@@ -125,8 +136,6 @@ namespace Calculator_Project
                 value = Double.Parse(textBoxResult.Text);
                 operation = "";
             }
-
-            //operationPerformed = false;
         }
 
         private void ButtonPLUSMINUS_Click(object sender, RoutedEventArgs e)
@@ -169,6 +178,7 @@ namespace Calculator_Project
 
             double val = Double.Parse(textBoxResult.Text);
             val *= val;
+            isPowerOperationPerformed = true;
             textBoxResult.Text = val.ToString();
         }
 
@@ -190,7 +200,6 @@ namespace Calculator_Project
             {
                 operation = "";
                 equation.Clear();
-                //operationPerformed = true;
                 return true;
             }
             else
